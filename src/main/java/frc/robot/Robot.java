@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -17,53 +16,48 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 
+	public static Drivebase drivebase;
 
-  public static Drivebase drivebase;
-  
+	/**
+	* This function is run when the robot is first started up and should be used for any
+	* initialization code.
+	*/
+	@Override
+	public void robotInit() {
+		drivebase = new Drivebase();
+	}
 
+	@Override
+	public void robotPeriodic() {}
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {}
+	@Override
+	public void autonomousInit() {}
 
-  @Override
-  public void robotPeriodic() {}
+	@Override
+	public void autonomousPeriodic() {}
 
-  @Override
-  public void autonomousInit() {}
+	@Override
+	public void teleopInit() {}
 
-  @Override
-  public void autonomousPeriodic() {}
+	@Override
+	public void teleopPeriodic() {
 
-  @Override
-  public void teleopInit() {}
+		RobotIO.update();
+		double adjustment = SmartDashboard.getNumber("Drive Adjustment", 1);
 
-  @Override
-  public void teleopPeriodic() {
+		if (RobotIO.shouldDrive())
+		drivebase.drive(adjustment * RobotIO.XBOX_LEFT_POS.getY(), adjustment * RobotIO.XBOX_RIGHT_POS.getY());
+	}
 
-    OI.update();
-    double adjustment = SmartDashboard.getNumber("Drive Adjustment", 1);
+	@Override
+	public void disabledInit() {}
 
-    if ((Math.abs(OI.lY) > 0.1) || (Math.abs(OI.rY) > 0.1)) {
+	@Override
+	public void disabledPeriodic() {}
 
-      drivebase.drive(adjustment * OI.lY, adjustment * OI.rY);
-    }
+	@Override
+	public void testInit() {}
 
-
-  }
-
-  @Override
-  public void disabledInit() {}
-
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void testInit() {}
-
-  @Override
-  public void testPeriodic() {}
+	@Override
+	public void testPeriodic() {}
 }
