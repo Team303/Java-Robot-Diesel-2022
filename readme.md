@@ -19,6 +19,13 @@ The new system merges everything into one convenient location for programming au
 
 To assist new members with learning our codebase, I will be creating some basic guides/tutorials about how to use parts of the code so that everyone understands how the new systems work.
 
+## Robot Methods (Timed Robot)
+
+robotInit, teleopPeriodic, etc
+
+## Robot IO / RoboRio DIO
+
+## Robot Map
 ## Actions
 
 During the robot's autonomous control phase (the first 15 seconds of the game), the drive team is not able to control the robot. Instead, we have to create a preprogrammed route (or usually a lot of preprogrammed routes) in order to instruct the robot to move without our input. These instructions can be simple like "wait 5 seconds" and "drive straight 1 meter", or complicated like "aim towards the goal and fire a projectile". Reguardless, we need a way to give the robot a list of reusable instructions to tell it what to do during autonomous. This is were Actions come in. 
@@ -28,3 +35,17 @@ An Action is just a task the robot is programmed to do, that can be measured as 
 ### Creating Actions
 
 to be continued...
+
+### Creating Autonomous Programs
+
+## Smart Dashboard
+
+
+
+# Todo
+
+* Create custom scripting language for actions programming
+* Add pneumatics controls
+* Add camera input
+* Add PWM motor controlers
+* Add joysticks back
