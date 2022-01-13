@@ -10,8 +10,8 @@ import java.util.List;
  * Actions can be defined as either conditional or non-conditional
  * 
  * Conditional Actions determine whether or not the entire Task is completed,
- * while Non-Conditional Actions will run until completion or until all of 
- * the Conditional Actions have completed. 
+ * while Non-Conditional Actions will run until completion or until all of
+ * the Conditional Actions have completed.
  */
 public class ActionParallelAction extends Action {
 
@@ -37,24 +37,26 @@ public class ActionParallelAction extends Action {
 
     // runs all actions
     protected void onRun() {
-        for (Action e : conditionActions) {
+        for (Action e : conditionActions)
             e.execute();
-        }
-        for (Action e : nonConditionActions) {
+
+        for (Action e : nonConditionActions)
             e.execute();
-        }
     }
 
-    // checks if all conditional actions are finished
     @Override
     public boolean isDone() {
+        // If any are not done return false
         for (Action e : conditionActions) {
-            if (!e.isDone())
+            if (!e.hasFinished)
                 return false;
         }
         return true;
     }
 
+    /**
+     * ngl this is pretty overengineered but its ok - Adrian at 4am
+     */
     @Override
     public String getName() {
         String condNames = "";

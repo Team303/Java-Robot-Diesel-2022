@@ -16,7 +16,7 @@ public class ActionDriveStraightByEncoders extends Action {
 
     Timer timer;
     public double initalYaw;
-    public int initial;
+    public int initialEncoderVal;
 
     public ActionDriveStraightByEncoders(double distance, double power, double timeout) {
         this.distance = distance;
@@ -25,13 +25,13 @@ public class ActionDriveStraightByEncoders extends Action {
 
         this.timer = new Timer();
         this.initalYaw = 0;
-        this.initial = 0;
+        this.initialEncoderVal = 0;
     }
 
     @Override
     protected void beforeFirstRun() {
         timer.start();
-        initial = Robot.drivebase.getLeftEncoder();
+        initialEncoderVal = Robot.drivebase.getLeftEncoder();
     }
 
     @Override
@@ -42,13 +42,19 @@ public class ActionDriveStraightByEncoders extends Action {
     /**
      * Tests to see if the robot is finished with this task by doing math with the
      * encoders.
+     * 
      * If done, the robot will reset to not moving.
      */
     @Override
     protected boolean isDone() {
-        if (timer.get() >= timeout)
+        // If timeout has exceeded, stop timer
+        if (timer.get() >= timeout) {
             timer.stop();
-        return Math.abs(Robot.drivebase.getLeftEncoder() - initial) >= Math.abs(distance) || timer.get() >= timeout;
+            return true;
+        }
+
+        // Check if driven distance exceeds the provided distance
+        return Math.abs(Robot.drivebase.getLeftEncoder() - initialEncoderVal) >= Math.abs(distance);
     }
 
     @Override

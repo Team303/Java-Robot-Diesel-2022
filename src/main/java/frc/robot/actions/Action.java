@@ -1,7 +1,6 @@
 package frc.robot.actions;
 
 import frc.robot.Robot;
-// import frc.robot.annotations.ActionEvent;
 
 /**
  * Template for how Robot Actions work
@@ -16,39 +15,64 @@ public abstract class Action {
 
     /**
      * Display name to show in SmartDashboard
-     * 
+     *
      * @return The display name of the Action
      */
     public abstract String getName();
 
     /**
      * Called after every run to find out if the action has completed,
-     * and should no longer be run
+     * and should no longer be run. Once a true value is returned, 
+     * it will never be called again
      * 
+     * <br/>
+     * <br/>
+     * 
+     * 🟡🔴 Should ⛔<b>NEVER</b>⛔ be called outside the <i>Action</i> class 🔴🟡
      * <br/><br/>
-     * 
-     * Should <b>NEVER</b> be called outside the <i>Action</i> class
-     * 
-     * @return Wether or not the action has finished its job
+     * If any of you call this outside of the <code>execute()</code> method I'll have your head
+     *
+     * @return Whether or not the action has finished its job
      */
     protected abstract boolean isDone();
-    
+
     /**
      * Called every time the action is run until it is finished
+     * 
+     * <br/>
+     * <br/>
+     * 
+     * 🟡🔴 Should ⛔<b>NEVER</b>⛔ be called outside the <i>Action</i> class 🔴🟡
+     * <br/><br/>
+     * If any of you call this outside of the <code>execute()</code> method I'll have your head
      */
     protected void onRun() {
 
-    };
+    }
 
     /**
      * Executed right before the Action is run for the first time
+     * 
+     * <br/>
+     * <br/>
+     * 
+     * 🟡🔴 Should ⛔<b>NEVER</b>⛔ be called outside the <i>Action</i> class 🔴🟡
+     * <br/><br/>
+     * If any of you call this outside of the <code>execute()</code> method I'll have your head
      */
     protected void beforeFirstRun() {
-        
+
     }
 
     /**
      * Executed right after the Action is run for the first time
+     * 
+     * <br/>
+     * <br/>
+     * 
+     * 🟡🔴 Should ⛔<b>NEVER</b>⛔ be called outside the <i>Action</i> class 🔴🟡
+     * <br/><br/>
+     * If any of you call this outside of the <code>execute()</code> method I'll have your head
      */
     protected void afterFirstRun() {
 
@@ -56,23 +80,28 @@ public abstract class Action {
 
     /**
      * Executed right after the Action has finished running
+     * 
+     * <br/>
+     * <br/>
+     * 
+     * 🟡🔴 Should ⛔<b>NEVER</b>⛔ be called outside the <i>Action</i> class 🔴🟡
+     * <br/><br/>
+     * If any of you call this outside of the <code>execute()</code> method I'll have your head
      */
-    // @ActionEvent
     protected void afterFinished() {
 
     }
 
-
     /**
      * Called to run the action from an action handler
-     * 
-     * <br/><br/>
-     * 
+     * <p>
+     * <br/>
+     * <br/>
+     * <p>
      * Makes sure life cycle events are called
-     * 
+     *
      * @return Whether or not the Action is finished
      */
-    // @ActionEvent
     public boolean execute() {
         boolean wasFirstRun = isFirstRun;
 
@@ -81,25 +110,28 @@ public abstract class Action {
             this.isFirstRun = false;
         }
 
-        if (wasFirstRun) this.afterFirstRun();
-        
+        if (wasFirstRun)
+            this.afterFirstRun();
+
         // After Finishing, this part will lock up
-        if (this.hasFinished) return true;
-        
+        if (this.hasFinished)
+            return true;
+
         this.onRun();
 
         this.hasFinished = this.isDone();
-        if (this.hasFinished) this.afterFinished();
-        
+        if (this.hasFinished)
+            this.afterFinished();
+
         return this.hasFinished;
     }
-    
+
     /**
      * TODO - Make this not shit
+     *
      * @param powSetpoint
      * @param angleDifference
      * @param tuningConstant
-     * @return 
      */
     public static void driveStraight(double powSetpoint, double angleDifference, double tuningConstant) {
         double powLeft = powSetpoint + (angleDifference * tuningConstant);
