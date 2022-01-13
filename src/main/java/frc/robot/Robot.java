@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotIO.InputMethod;
 import frc.robot.autonomous.Auto;
 import frc.robot.autonomous.Autonomous;
 import static frc.robot.autonomous.Auto.Position;;
@@ -25,9 +26,10 @@ public class Robot extends TimedRobot {
 	public static Drivebase drivebase;
 	public static Autonomous auto;
 
-	private SendableChooser<Auto> autoChooser = new SendableChooser<>();
-	private SendableChooser<Position> positionChooser = new SendableChooser<>();
-	private Position lastPos;
+	static public SendableChooser<Auto> autoChooser = new SendableChooser<>();
+	static public SendableChooser<Position> positionChooser = new SendableChooser<>();
+	static public SendableChooser<RobotIO.InputMethod> inputChooser = new SendableChooser<>();
+	static private Position lastPos;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -39,6 +41,11 @@ public class Robot extends TimedRobot {
 		// Init Drivebase
 		drivebase = new Drivebase();
 		drivebase.zeroEncoders();
+
+		// Add input methods to SmartDashboard
+		inputChooser.addOption("Xbox Controller", InputMethod.XBOX);
+		inputChooser.addOption("Joystick", InputMethod.JOYSTICK);
+		inputChooser.setDefaultOption("Xbox Controller", InputMethod.XBOX);
 
 		// Add starting position to SmartDashboard
 		positionChooser.addOption("Left", Position.LEFT);
