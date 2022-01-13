@@ -60,9 +60,8 @@ public enum AutoFactory {
     private static ArrayList<AutoFactory> getAllAutos(Predicate<? super AutoFactory> filter) {
         ArrayList<AutoFactory> autos = new ArrayList<>();
         for (AutoFactory val : values())
-            autos.add(val);
+            if (filter.test(val)) autos.add(val);
 
-        autos.removeIf(filter);
         return autos;
     }
 

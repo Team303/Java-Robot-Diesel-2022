@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotIO.InputMethod;
 import frc.robot.autonomous.AutoFactory;
 import frc.robot.autonomous.Autonomous;
 import static frc.robot.autonomous.AutoFactory.Position;;
@@ -28,7 +27,6 @@ public class Robot extends TimedRobot {
 
 	static public SendableChooser<AutoFactory> autoChooser = new SendableChooser<>();
 	static public SendableChooser<Position> positionChooser = new SendableChooser<>();
-	static public SendableChooser<RobotIO.InputMethod> inputChooser = new SendableChooser<>();
 	static private Position lastPos;
 
 	/**
@@ -41,11 +39,6 @@ public class Robot extends TimedRobot {
 		// Init Drivebase
 		drivebase = new Drivebase();
 		drivebase.zeroEncoders();
-
-		// Add input methods to SmartDashboard
-		inputChooser.addOption("Xbox Controller", InputMethod.XBOX);
-		inputChooser.addOption("Joystick", InputMethod.JOYSTICK);
-		inputChooser.setDefaultOption("Xbox Controller", InputMethod.XBOX);
 
 		// Add starting position to SmartDashboard
 		positionChooser.addOption("Left", Position.LEFT);
@@ -98,10 +91,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 
-		double adjustment = SmartDashboard.getNumber("Drive Adjustment", 1);
+		double adjustment = SmartDashboard.getNumber("Speed Multiplier", 1);
 
 		if (RobotIO.shouldDrive())
-			drivebase.drive(adjustment * RobotIO.XBOX_LEFT_POS.getY(), adjustment * RobotIO.XBOX_RIGHT_POS.getY());
+			drivebase.drive(adjustment * RobotIO.LEFT_JOYSTICK_POS.getY(), adjustment * RobotIO.RIGHT_JOYSTICK_POS.getY());
 	}
 
 	@Override
@@ -125,7 +118,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void updateSmartDashboard() {
-		SmartDashboard.putBoolean("Enabled", this.isEnabled());
+		SmartDashboard.setDefaultNumber("Speed Multiplier", 1);
 
 		// If the selected postion changed from the last update, 
 		// update the auto list with the most recent values.
