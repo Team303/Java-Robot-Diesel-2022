@@ -5,59 +5,133 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.autonomous.Auto;
+import frc.robot.autonomous.Autonomous;
+import static frc.robot.autonomous.Auto.Position;;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
 
 	public static Drivebase drivebase;
+	public static Autonomous auto;
+
+	private SendableChooser<Auto> autoChooser = new SendableChooser<>();
+	private SendableChooser<Position> positionChooser = new SendableChooser<>();
+	private Position lastPos;
 
 	/**
-	* This function is run when the robot is first started up and should be used for any
-	* initialization code.
-	*/
+	 * This function is run when the robot is first started up and should be used
+	 * for any
+	 * initialization code.
+	 */
 	@Override
 	public void robotInit() {
+		// Init Drivebase
 		drivebase = new Drivebase();
+		drivebase.zeroEncoders();
+
+		// Add starting position to SmartDashboard
+		positionChooser.addOption("Left", Position.LEFT);
+		positionChooser.addOption("Center", Position.CENTER);
+		positionChooser.addOption("Right", Position.RIGHT);
+		positionChooser.setDefaultOption("Center", Position.CENTER);
+
+		SmartDashboard.putData("Starting Position", positionChooser);
+
+		Position selectedPosition = positionChooser.getSelected();
+		lastPos = selectedPosition;
+
+		// Add Autonomous options to SmartDashboard based on selected position
+		for (Auto auto : Auto.getAutosFromPos(selectedPosition))
+			autoChooser.addOption(auto.getName(), auto);
+
+		autoChooser.setDefaultOption(Auto.DO_NOTHING.getName(), Auto.DO_NOTHING);
+
+		SmartDashboard.putData("Autos", autoChooser);
+
+		updateSmartDashboard();
 	}
 
 	@Override
-	public void robotPeriodic() {}
+	public void robotPeriodic() {
+		RobotIO.update();
+		updateSmartDashboard();
+	}
 
 	@Override
-	public void autonomousInit() {}
+	public void autonomousInit() {
+		drivebase.zeroEncoders();
+
+		Auto selected = autoChooser.getSelected();
+
+		auto = selected.construct();
+	}
 
 	@Override
-	public void autonomousPeriodic() {}
+	public void autonomousPeriodic() {
+		drivebase.periodic();
+		auto.run();
+	}
 
 	@Override
-	public void teleopInit() {}
+	public void teleopInit() {
+	}
 
 	@Override
 	public void teleopPeriodic() {
 
-		RobotIO.update();
 		double adjustment = SmartDashboard.getNumber("Drive Adjustment", 1);
 
 		if (RobotIO.shouldDrive())
-		drivebase.drive(adjustment * RobotIO.XBOX_LEFT_POS.getY(), adjustment * RobotIO.XBOX_RIGHT_POS.getY());
+			drivebase.drive(adjustment * RobotIO.XBOX_LEFT_POS.getY(), adjustment * RobotIO.XBOX_RIGHT_POS.getY());
 	}
 
 	@Override
-	public void disabledInit() {}
+	public void disabledInit() {
+
+	}
 
 	@Override
-	public void disabledPeriodic() {}
+	public void disabledPeriodic() {
+
+	}
 
 	@Override
-	public void testInit() {}
+	public void testInit() {
+	}
 
 	@Override
-	public void testPeriodic() {}
+	public void testPeriodic() {
+	}
+
+	public void updateSmartDashboard() {
+		SmartDashboard.putBoolean("Enabled", this.isEnabled());
+
+		// If the selected postion changed from the last update, 
+		// update the auto list with the most recent values.
+		Position selectedPosition = positionChooser.getSelected();
+		if (selectedPosition != lastPos) {
+			lastPos = selectedPosition;
+
+			autoChooser.close();
+			autoChooser = new SendableChooser<>();
+
+			for (Auto auto : Auto.getAutosFromPos(selectedPosition))
+				autoChooser.addOption(auto.getName(), auto);
+
+			autoChooser.setDefaultOption(Auto.DO_NOTHING.getName(), Auto.DO_NOTHING);
+
+			SmartDashboard.putData("Autos", autoChooser);
+		}
+	}
 }
