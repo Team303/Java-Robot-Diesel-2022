@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotIO.InputMethod;
-import frc.robot.autonomous.Auto;
+import frc.robot.autonomous.AutoFactory;
 import frc.robot.autonomous.Autonomous;
-import static frc.robot.autonomous.Auto.Position;;
+import static frc.robot.autonomous.AutoFactory.Position;;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 	public static Drivebase drivebase;
 	public static Autonomous auto;
 
-	static public SendableChooser<Auto> autoChooser = new SendableChooser<>();
+	static public SendableChooser<AutoFactory> autoChooser = new SendableChooser<>();
 	static public SendableChooser<Position> positionChooser = new SendableChooser<>();
 	static public SendableChooser<RobotIO.InputMethod> inputChooser = new SendableChooser<>();
 	static private Position lastPos;
@@ -59,10 +59,10 @@ public class Robot extends TimedRobot {
 		lastPos = selectedPosition;
 
 		// Add Autonomous options to SmartDashboard based on selected position
-		for (Auto auto : Auto.getAutosFromPos(selectedPosition))
+		for (AutoFactory auto : AutoFactory.getAutosFromPos(selectedPosition))
 			autoChooser.addOption(auto.getName(), auto);
 
-		autoChooser.setDefaultOption(Auto.DO_NOTHING.getName(), Auto.DO_NOTHING);
+		autoChooser.setDefaultOption(AutoFactory.DO_NOTHING.getName(), AutoFactory.DO_NOTHING);
 
 		SmartDashboard.putData("Autos", autoChooser);
 
@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		drivebase.zeroEncoders();
 
-		Auto selected = autoChooser.getSelected();
+		AutoFactory selected = autoChooser.getSelected();
 
 		auto = selected.construct();
 	}
@@ -136,10 +136,10 @@ public class Robot extends TimedRobot {
 			autoChooser.close();
 			autoChooser = new SendableChooser<>();
 
-			for (Auto auto : Auto.getAutosFromPos(selectedPosition))
+			for (AutoFactory auto : AutoFactory.getAutosFromPos(selectedPosition))
 				autoChooser.addOption(auto.getName(), auto);
 
-			autoChooser.setDefaultOption(Auto.DO_NOTHING.getName(), Auto.DO_NOTHING);
+			autoChooser.setDefaultOption(AutoFactory.DO_NOTHING.getName(), AutoFactory.DO_NOTHING);
 
 			SmartDashboard.putData("Autos", autoChooser);
 		}

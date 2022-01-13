@@ -6,7 +6,7 @@ import frc.robot.actions.ActionWait;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-public enum Auto {
+public enum AutoFactory {
     DO_NOTHING("Do Nothing", new ActionWait(Double.MAX_VALUE)),
     DRIVE_FORWARDS("Drive Forwards", new ActionDriveStraightByEncoders(29863, 0.4, 15)),
     CENTER_DRIVE_TURN_DRIVE("Drive Turn Drive (Center)", Position.CENTER,
@@ -24,7 +24,7 @@ public enum Auto {
      * @param startingPosition The position on the field which this auto can run on
      * @param actions          An array of actions which define the Auto's behavior
      */
-    private Auto(String name, Position startingPosition, Action... actions) {
+    private AutoFactory(String name, Position startingPosition, Action... actions) {
         this.startingPosition = startingPosition;
         this.actions = actions;
         this.name = name;
@@ -36,7 +36,7 @@ public enum Auto {
      * @param name    Name to display in the Auto selection menu
      * @param actions An array of actions which define the Auto's behavior
      */
-    private Auto(String name, Action... actions) {
+    private AutoFactory(String name, Action... actions) {
         this(name, null, actions);
     }
 
@@ -53,20 +53,20 @@ public enum Auto {
         return this.name;
     }
 
-    public static ArrayList<Auto> getAllAutos() {
+    public static ArrayList<AutoFactory> getAllAutos() {
         return getAllAutos((auto) -> false);
     }
 
-    private static ArrayList<Auto> getAllAutos(Predicate<? super Auto> filter) {
-        ArrayList<Auto> autos = new ArrayList<>();
-        for (Auto val : values())
+    private static ArrayList<AutoFactory> getAllAutos(Predicate<? super AutoFactory> filter) {
+        ArrayList<AutoFactory> autos = new ArrayList<>();
+        for (AutoFactory val : values())
             autos.add(val);
 
         autos.removeIf(filter);
         return autos;
     }
 
-    public static ArrayList<Auto> getAutosFromPos(Position pos) {
+    public static ArrayList<AutoFactory> getAutosFromPos(Position pos) {
         return getAllAutos((auto) -> auto.startingPosition == pos);
     }
 
