@@ -127,7 +127,7 @@ public abstract class Action {
     }
 
     /**
-     * TODO - Make this not shit
+     * TODO - Make this more clear
      *
      * @param powSetpoint
      * @param angleDifference

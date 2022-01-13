@@ -92,6 +92,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		
 	}
 
 	@Override
@@ -115,10 +116,12 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void testInit() {
+
 	}
 
 	@Override
 	public void testPeriodic() {
+
 	}
 
 	public void updateSmartDashboard() {
