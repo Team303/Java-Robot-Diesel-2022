@@ -25,3 +25,6 @@ pluginManagement {
         }
     }
 }
+
+include 'core'
+include 'diesel'

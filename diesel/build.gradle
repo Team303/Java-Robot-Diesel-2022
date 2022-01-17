@@ -1,0 +1,30 @@
+
+plugins {
+    id 'java'
+    id "edu.wpi.first.GradleRIO" version "2022.1.1"
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+description = "Team 303 Shuffleboard to create and manage pre-programmed autonomous strategies"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation wpi.java.deps.wpilib()
+    implementation wpi.java.vendor.java()
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+}
+
+jar {
+    archiveBaseName = 'team303-diesel'
+    archiveVersion =  '0.1.0'
+
+    into 'resources', {
+        from 'resources'
+    }
+}
